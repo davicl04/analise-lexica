@@ -1,0 +1,11 @@
+.data
+valor: .word 10
+li $t0, 10
+rot: add $t0, $t1, $t2
+outro: .byte 1
+.text
+main: li $t0, 1
+.word 10
+dado: .asciiz "texto"
+.space 4
+syscall

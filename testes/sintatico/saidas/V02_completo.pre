@@ -1,0 +1,54 @@
+.data
+.globl main
+numero: .word 10
+vetor: .word 10, 20, -30, 0xFF
+pequeno: .byte 65
+lista: .byte 1, 2, 3
+valor: .half 1000
+mensagem: .asciiz "Resultado: \"ok\"\n"
+texto: .ascii "ABC, > fim"
+buffer: .space 100
+.align 2
+isolado:
+.text
+.globl main
+main:
+li $t0, 10
+li $t1, 0x1F
+la $a0, mensagem
+move $s0, $t0
+add $t2, $t0, $t1
+addu $t2, $t0, $t1
+sub $t2, $t0, $t1
+subu $t2, $t0, $t1
+mul $t2, $t0, $t1
+and $t2, $t0, $t1
+or $t2, $t0, $t1
+xor $t2, $t0, $t1
+nor $t2, $t0, $t1
+slt $t2, $t0, $t1
+div $t0, $t1
+mflo $t3
+mfhi $t4
+addi $t0, $t0, -1
+sll $t5, $t0, 2
+srl $t5, $t0, 2
+lw $t6, numero
+sw $t6, 4($sp)
+lb $t7, pequeno
+sb $t7, 0($sp)
+lh $t8, valor
+sh $t8, -8($fp)
+laco: beq $t0, $zero, fim
+bne $t0, $t1, laco
+blt $t0, $t1, laco
+ble $t0, $t1, laco
+bgt $t0, $t1, laco
+bge $t0, $t1, laco
+jal rotina
+j fim
+rotina: nop
+jr $ra
+fim:
+li $v0, 10
+syscall

@@ -1,0 +1,15 @@
+.data extra
+lista: .word 10,
+.word 10 20
+.word , 10
+.text
+add $t0 $t1, $t2
+add $t0, $t1 $t2
+main li $t0, 1
+lw $t0, 4 $sp
+lw $t0, 4($sp
+lw $t0, 4 $sp)
+sw $t0, ($sp)
+li $t0 10
+li $t0,
+fim: nop

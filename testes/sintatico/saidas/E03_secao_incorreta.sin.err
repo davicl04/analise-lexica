@@ -1,0 +1,10 @@
+Linha 3, coluna 1:
+Encontrado INS_LI("li"); esperado rótulo, diretiva de dados ou .globl (seção .data).
+Linha 4, coluna 6:
+Encontrado INS_ADD("add"); esperado diretiva de dados ou fim de linha (EOL).
+Linha 8, coluna 1:
+Encontrado DIR_WORD(".word"); esperado rótulo, instrução ou .globl (seção .text).
+Linha 9, coluna 7:
+Encontrado DIR_ASCIIZ(".asciiz"); esperado instrução ou fim de linha (EOL).
+Linha 10, coluna 1:
+Encontrado DIR_SPACE(".space"); esperado rótulo, instrução ou .globl (seção .text).

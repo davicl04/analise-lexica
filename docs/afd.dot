@@ -1,0 +1,119 @@
+digraph AFD_uAssembly {
+    rankdir=LR;
+    graph [fontname="Helvetica", fontsize=12, nodesep=0.35, ranksep=0.7,
+           label="AFD do analisador lexico - u-Assembly (MIPS/MARS)\nCirculo duplo = estado final (emite token)   |   Vermelho = estado de erro   |   'outro / devolve' = lookahead devolvido ao fluxo",
+           labelloc=t];
+    node  [fontname="Helvetica", fontsize=10, shape=circle, style=filled, fillcolor="#eef3fb", color="#35507a"];
+    edge  [fontname="Helvetica", fontsize=9, color="#555555"];
+
+    inicio [shape=point, width=0.15, fillcolor=black];
+    q0 [label="q0\ninicial", fillcolor="#d9e6f7"];
+    inicio -> q0;
+
+    /* ---------- espacos e EOF ---------- */
+    q0 -> q0 [label="espaco, tab, \\n\n(\\r\\n e \\r contam como \\n)"];
+    F_EOF [label="TK_EOF", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    q0 -> F_EOF [label="EOF"];
+
+    /* ---------- comentario ---------- */
+    q_com [label="q_com\ncomentario"];
+    q0 -> q_com [label="#"];
+    q_com -> q_com [label="qualquer\nexceto \\n"];
+    q_com -> q0 [label="\\n, EOF"];
+
+    /* ---------- simbolos ---------- */
+    F_COM [label="SMB_COM", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    F_COL [label="SMB_COL", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    F_OPA [label="SMB_OPA", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    F_CPA [label="SMB_CPA", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    q0 -> F_COM [label=","];
+    q0 -> F_COL [label=":"];
+    q0 -> F_OPA [label="("];
+    q0 -> F_CPA [label=")"];
+
+    /* ---------- identificador / instrucao ---------- */
+    q_id [label="q_id\nidentificador"];
+    F_ID [label="INS_* ou ID\n(consulta TS)", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    E_ID [label="ERRO_IDENTIFICADOR\n_MALFORMADO", shape=box, style="filled,rounded", fillcolor="#fde2e2", color="#c62828"];
+    q0 -> q_id [label="letra, _"];
+    q_id -> q_id [label="letra, digito, _"];
+    q_id -> F_ID [label="delimitador / devolve"];
+    q_id -> E_ID [label="outro\n(consome ate delimitador)"];
+
+    /* ---------- diretiva ---------- */
+    q_dir0 [label="q_dir0\nponto"];
+    q_dir  [label="q_dir\ndiretiva"];
+    F_DIR [label="DIR_*\n(consulta lista)", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    E_DIR [label="ERRO_DIRETIVA\n_INVALIDA", shape=box, style="filled,rounded", fillcolor="#fde2e2", color="#c62828"];
+    q0 -> q_dir0 [label="."];
+    q_dir0 -> q_dir [label="letra, digito, _"];
+    q_dir0 -> E_DIR [label="outro\n(ponto isolado ou colado a\nnao delimitador: consome ate delimitador)"];
+    q_dir -> q_dir [label="letra, digito, _"];
+    q_dir -> F_DIR [label="delimitador / devolve\n[na lista]"];
+    q_dir -> E_DIR [label="delimitador / devolve [fora da lista]\nou nao delimitador (ex.: .text@,\nconsome ate delimitador)"];
+
+    /* ---------- registrador ---------- */
+    q_reg0 [label="q_reg0\ncifrao"];
+    q_reg  [label="q_reg\nregistrador"];
+    F_REG [label="REG\n(consulta TS)", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    E_REG [label="ERRO_REGISTRADOR\n_INVALIDO", shape=box, style="filled,rounded", fillcolor="#fde2e2", color="#c62828"];
+    q0 -> q_reg0 [label="$"];
+    q_reg0 -> q_reg [label="letra, digito, _"];
+    q_reg0 -> E_REG [label="outro / devolve\n(malformado)"];
+    q_reg -> q_reg [label="letra, digito, _"];
+    q_reg -> F_REG [label="outro / devolve\n[registrador valido]"];
+    q_reg -> E_REG [label="outro / devolve\n[invalido]"];
+
+    /* ---------- numeros ---------- */
+    q_neg  [label="q_neg\nnegativo"];
+    q_zero [label="q_zero\nzero inicial"];
+    q_dec  [label="q_dec\ndecimal"];
+    q_hex0 [label="q_hex0\nprefixo 0x"];
+    q_hex  [label="q_hex\nhexadecimal"];
+    F_NUM [label="NUM_INT", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    E_NUM [label="ERRO_NUMERO\n_MALFORMADO", shape=box, style="filled,rounded", fillcolor="#fde2e2", color="#c62828"];
+    E_IDN [label="ERRO_IDENTIFICADOR\n_MALFORMADO\n(ex.: 2valor)", shape=box, style="filled,rounded", fillcolor="#fde2e2", color="#c62828"];
+    E_CHR [label="ERRO_CARACTERE\n_INVALIDO\n(caractere UTF-8 de\nvarios bytes = 1 erro)", shape=box, style="filled,rounded", fillcolor="#fde2e2", color="#c62828"];
+
+    q0 -> q_neg  [label="-  [espia: digito]"];
+    q0 -> E_CHR  [label="-  [espia: nao digito]"];
+    q0 -> q_zero [label="0"];
+    q0 -> q_dec  [label="1-9"];
+    q_neg -> q_zero [label="0"];
+    q_neg -> q_dec  [label="1-9"];
+    q_zero -> q_hex0 [label="x, X"];
+    q_zero -> q_dec  [label="digito"];
+    /* em todo erro de numero, o restante e consumido ate o proximo delimitador */
+    q_zero -> F_NUM  [label="delimitador / devolve"];
+    q_zero -> E_IDN  [label="letra (exceto x), _\n[sem sinal]"];
+    q_zero -> E_NUM  [label="letra (exceto x), _ [com sinal]\nou outro nao delimitador"];
+    q_dec -> q_dec   [label="digito"];
+    q_dec -> F_NUM   [label="delimitador / devolve"];
+    q_dec -> E_IDN   [label="letra, _\n[sem sinal]"];
+    q_dec -> E_NUM   [label="letra, _ [com sinal]\nou outro nao delimitador\n(ex.: 10@)"];
+    q_hex0 -> q_hex  [label="digito hex"];
+    q_hex0 -> E_NUM  [label="outro\n(0x vazio ou letra nao hex)"];
+    q_hex -> q_hex   [label="digito hex"];
+    q_hex -> E_NUM   [label="nao delimitador\n(ex.: 0x1Fz, 0x1@)"];
+    q_hex -> F_NUM   [label="delimitador / devolve"];
+
+    /* ---------- cadeia de caracteres ---------- */
+    q_str [label="q_str\ncadeia"];
+    q_esc [label="q_esc\nescape"];
+    F_STR [label="STRING", shape=doublecircle, fillcolor="#dff3e3", color="#2e7d32"];
+    E_STR [label="ERRO_STRING\n_NAO_FECHADA", shape=box, style="filled,rounded", fillcolor="#fde2e2", color="#c62828"];
+    E_STE [label="ERRO_STRING_NAO\n_FECHADA_EOF", shape=box, style="filled,rounded", fillcolor="#fde2e2", color="#c62828"];
+    E_ESC [label="ERRO_ESCAPE\n_INVALIDO\n(continua ate fechar,\nsem emitir STRING)", shape=box, style="filled,rounded", fillcolor="#fde2e2", color="#c62828"];
+    q0 -> q_str [label="\""];
+    q_str -> q_str [label="qualquer exceto\n\"  \\  \\n  EOF"];
+    q_str -> F_STR [label="\""];
+    q_str -> q_esc [label="\\"];
+    q_str -> E_STR [label="\\n / devolve"];
+    q_str -> E_STE [label="EOF"];
+    q_esc -> q_str [label="n, t, \", \\, 0"];
+    q_esc -> E_ESC [label="outro"];
+    E_ESC -> q_str [style=dashed, label="continua"];
+
+    /* ---------- caractere invalido ---------- */
+    q0 -> E_CHR [label="outro\n(ex.: @ % &)"];
+}

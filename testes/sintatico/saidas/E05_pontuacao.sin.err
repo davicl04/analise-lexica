@@ -1,0 +1,26 @@
+Linha 1, coluna 7:
+Encontrado ID("extra"); esperado fim de linha (EOL).
+Linha 2, coluna 17:
+Encontrado fim de linha (EOL); esperado NUM_INT.
+Linha 3, coluna 10:
+Encontrado NUM_INT("20"); esperado fim de linha (EOL).
+Linha 4, coluna 7:
+Encontrado SMB_COM(","); esperado NUM_INT.
+Linha 6, coluna 9:
+Encontrado REG("$t1"); esperado SMB_COM(",").
+Linha 7, coluna 14:
+Encontrado REG("$t2"); esperado SMB_COM(",").
+Linha 8, coluna 6:
+Encontrado INS_LI("li"); esperado SMB_COL(":").
+Linha 9, coluna 11:
+Encontrado REG("$sp"); esperado SMB_OPA("(").
+Linha 10, coluna 14:
+Encontrado fim de linha (EOL); esperado SMB_CPA(")").
+Linha 11, coluna 11:
+Encontrado REG("$sp"); esperado SMB_OPA("(").
+Linha 12, coluna 9:
+Encontrado SMB_OPA("("); esperado endereço (ID ou NUM_INT).
+Linha 13, coluna 8:
+Encontrado NUM_INT("10"); esperado SMB_COM(",").
+Linha 14, coluna 8:
+Encontrado fim de linha (EOL); esperado NUM_INT.

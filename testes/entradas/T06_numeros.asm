@@ -1,0 +1,12 @@
+# T06 - Numeros decimais e hexadecimais
+.data
+dec:    .word 0, 15, 2025
+neg:    .word -1, -20, -32768
+hex:    .word 0x10, 0xFF, 0x10010000, 0XaB
+hexneg: .word -0x10, -0x20
+.text
+main:
+        li      $t0, 100
+        addi    $t1, $t0, -1
+        li      $t2, 0x7FFFFFFF
+        sll     $t3, $t2, 2

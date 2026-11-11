@@ -1,0 +1,16 @@
+.data
+msg: .asciiz "Resultado: "
+.text
+.globl main
+main:
+li $t0, 5
+li $t1, 10
+add $t2, $t0, $t1
+la $a0, msg
+li $v0, 4
+syscall
+move $a0, $t2
+li $v0, 1
+syscall
+li $v0, 10
+syscall

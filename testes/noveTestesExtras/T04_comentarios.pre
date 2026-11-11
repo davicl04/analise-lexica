@@ -1,0 +1,6 @@
+.data
+msg: .asciiz "Valor # nao e comentario"
+.text
+main:
+li $t0, 1
+syscall

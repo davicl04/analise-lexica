@@ -1,0 +1,15 @@
+.text
+.data
+.text
+inicio:
+j nao_existe
+.data
+x: .word 1
+x: .word 2
+.space -5
+.align 99
+.text
+inicio: sll $t0, $t0, 500
+li $t0, 0xFFFFFFFFFF
+syscall
+.data

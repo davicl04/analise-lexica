@@ -1,0 +1,23 @@
+.text
+main:
+add $t0, $t1
+li $t0, mensagem
+syscall $t0
+add $t0, $t1, $t2, $t3
+addi $t0, 5, $t1
+la $a0, 10
+jr fim
+j $ra
+beq $t0, $t1, 4
+move $t0
+lw $t0, $t1
+li $t0, 1 nop
+mflo
+fim: nop
+.data
+.word
+.asciiz 10
+.ascii "a", "b"
+.space "x"
+.globl
+ok: .word 1

@@ -1,0 +1,11 @@
+# T08 - Erros: cadeias e numeros malformados
+.data
+m1: .asciiz "Mensagem nao encerrada
+m2: .asciiz "Escape \q invalido"
+m3: .asciiz "Termina com barra\
+.text
+main:
+        li      $t0, 0xG1
+        li      $t1, 0x
+        li      $t2, -2abc
+        li      $t3, 25

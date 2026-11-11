@@ -1,0 +1,8 @@
+.data
+s1: .asciiz "Texto simples"
+s2: .asciiz "Espacos    internos   preservados"
+s3: .asciiz "Quebra\nTabulacao\t"
+s4: .asciiz "Aspas \"internas\" e barra \\"
+s5: .ascii "Nulo explicito\0"
+s6: .asciiz "Acentuação: operação"
+s7: .asciiz ""

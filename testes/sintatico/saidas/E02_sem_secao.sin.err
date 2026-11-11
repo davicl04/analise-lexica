@@ -1,0 +1,4 @@
+Linha 1, coluna 1:
+Encontrado ID("main"); esperado abertura de seção (.data ou .text).
+Linha 2, coluna 1:
+Encontrado INS_LI("li"); esperado abertura de seção (.data ou .text).

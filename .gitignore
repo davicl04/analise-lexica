@@ -1,0 +1,21 @@
+# Saídas do script de testes (scripts/run_tests.sh)
+build/
+
+# Binários e objetos de compilação
+*.exe
+*.o
+*.obj
+main
+
+# Configurações locais (permissões do Claude Code, editores)
+.claude/settings.local.json
+.vscode/
+.idea/
+
+# Arquivos do sistema operacional
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Repositório Git vazio aninhado (sem commits nem arquivos)
+analise-lexica/
